@@ -222,14 +222,119 @@
   .cal-day.today .cal-num { color: var(--accent); }
   .cal-meal-preview { font-size: 9px; color: var(--text3); line-height: 1.4; overflow: hidden; max-height: 50px; }
 
+  /* ── BOTTOM NAV (mobile only) ── */
+  .bottom-nav { display:none; }
+
   @media (max-width: 768px) {
-    nav { overflow-x: auto; }
-    .macro-targets { grid-template-columns: repeat(2, 1fr); }
-    .week-stats { grid-template-columns: repeat(2, 1fr); }
-    .daily-summary-grid { grid-template-columns: repeat(4, 1fr); }
-    .cal-grid { grid-template-columns: repeat(7, 1fr); }
-    .cal-day { min-height: 60px; padding: 4px; }
-    .page { padding: 16px; }
+    /* Hide top nav tabs, show bottom nav */
+    .nav-tab { display: none; }
+    .nav-logo { font-size: 17px; padding: 14px 0 14px 0; border-right: none; }
+    nav { padding: 0 16px; justify-content: space-between; height: 52px; }
+    .nav-right { margin-left: 0; }
+
+    /* Bottom nav bar */
+    .bottom-nav {
+      display: flex;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--bg2);
+      border-top: 1px solid var(--border2);
+      z-index: 100;
+      height: 62px;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    .bn-tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      cursor: pointer;
+      color: var(--text3);
+      font-size: 10px;
+      font-weight: 500;
+      transition: color .2s;
+      padding: 8px 4px;
+      border: none;
+      background: none;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .bn-tab.active { color: var(--accent); }
+    .bn-tab svg { width: 22px; height: 22px; stroke-width: 1.8; }
+
+    /* Page gets bottom padding so content isn't hidden behind nav */
+    .page { padding: 14px 14px 80px; }
+
+    /* Grids */
+    .macro-targets { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 16px; }
+    .macro-card { padding: 12px; }
+    .macro-card .value { font-size: 22px; }
+    .week-stats { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 14px; }
+    .wstat { padding: 10px 12px; }
+    .wstat .wstat-val { font-size: 17px; }
+    .daily-summary-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .day-summary-card { padding: 8px 4px; }
+    .day-summary-card .ds-kcal { font-size: 15px; }
+
+    /* Week planner — horizontal scroll, compact cells */
+    .week-grid { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .week-table { min-width: 620px; }
+    .week-table td, .week-table th { padding: 4px; }
+    .meal-entry { padding: 6px 8px; }
+    .meal-entry .meal-name { font-size: 11px; }
+    .meal-entry .meal-macros { font-size: 9px; }
+    .add-meal-btn { font-size: 11px; padding: 5px; }
+
+    /* Week header stacks */
+    .week-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .week-nav { width: 100%; justify-content: space-between; }
+    .week-title { font-size: 18px; }
+    .week-header > div:last-child { width: 100%; display: flex; flex-wrap: wrap; gap: 6px; }
+    .week-header > div:last-child .btn { flex: 1; min-width: 120px; font-size: 12px; padding: 7px 8px; }
+
+    /* Calendar */
+    .cal-day { min-height: 54px; padding: 4px; }
+    .cal-day .cal-num { font-size: 11px; }
+    .cal-meal-preview { font-size: 8px; max-height: 30px; }
+
+    /* Recipes grid — single column */
+    .recetas-grid { grid-template-columns: 1fr; }
+    .recetas-toolbar { gap: 8px; }
+    .recetas-toolbar .search-input { max-width: 100% !important; }
+    .recipe-card-img { height: 130px; }
+
+    /* Recipe detail full-screen */
+    .recipe-detail-overlay { padding: 0; }
+    .recipe-detail { border-radius: 0; min-height: 100vh; }
+    .recipe-detail-hero { height: 180px; }
+    .recipe-detail-hero-content h1 { font-size: 22px; }
+    .recipe-detail-body { padding: 16px; }
+
+    /* Modals full-screen on mobile */
+    .modal-overlay { align-items: flex-end; padding: 0; }
+    .modal {
+      border-radius: 20px 20px 0 0;
+      max-height: 92vh;
+      padding: 20px 18px 30px;
+      max-width: 100%;
+      width: 100%;
+    }
+    .recipe-editor { max-width: 100%; }
+    .form-row { grid-template-columns: 1fr; gap: 0; }
+    .form-row-4 { grid-template-columns: 1fr 1fr; gap: 8px; }
+
+    /* Shopping */
+    .shopping-header { gap: 8px; }
+    .shopping-title { font-size: 22px; width: 100%; }
+    .shopping-header .btn { font-size: 12px; padding: 7px 10px; }
+
+    /* Food table — horizontal scroll */
+    .food-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+    /* Banco header stacks */
+    .recipes-header { flex-direction: column; align-items: stretch; gap: 8px; }
+    .recipes-header .search-input { width: 100%; }
   }
 
   /* ===== RECETAS ===== */
@@ -368,7 +473,7 @@
     </select>
     <button class="btn btn-accent" onclick="openFoodModal()">+ Añadir alimento</button>
   </div>
-  <div style="overflow-x:auto;">
+  <div class="food-table-wrap" style="overflow-x:auto;">
     <table class="food-table">
       <thead>
         <tr>
@@ -643,6 +748,30 @@
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- BOTTOM NAV (mobile) -->
+<nav class="bottom-nav" id="bottom-nav">
+  <button class="bn-tab active" onclick="showPage('planner')" id="bn-planner">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    Planner
+  </button>
+  <button class="bn-tab" onclick="showPage('recetas')" id="bn-recetas">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2a9 9 0 1 0 0 18A9 9 0 0 0 12 2z"/><path d="M8 12h8M12 8v8"/></svg>
+    Recetas
+  </button>
+  <button class="bn-tab" onclick="showPage('compra')" id="bn-compra">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+    Compra
+  </button>
+  <button class="bn-tab" onclick="showPage('banco')" id="bn-banco">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+    Banco
+  </button>
+  <button class="bn-tab" onclick="showPage('calendario')" id="bn-calendario">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>
+    Calendario
+  </button>
+</nav>
 
 <script>
 // =============== DATA ===============
@@ -1354,11 +1483,17 @@ function showPage(id) {
   document.getElementById('page-'+id).classList.add('active');
   const tabs = {planner:0, banco:1, compra:2, calendario:3, recetas:4};
   document.querySelectorAll('.nav-tab')[tabs[id]].classList.add('active');
+  // Sync bottom nav
+  document.querySelectorAll('.bn-tab').forEach(t=>t.classList.remove('active'));
+  const bn = document.getElementById('bn-'+id);
+  if (bn) bn.classList.add('active');
   if (id==='banco') renderFoodTable();
   if (id==='compra') renderShopping();
   if (id==='calendario') renderCalendar();
   if (id==='planner') renderPlanner();
   if (id==='recetas') renderRecetas();
+  // Scroll to top on page change
+  window.scrollTo(0, 0);
 }
 
 // =============== TOAST ===============
